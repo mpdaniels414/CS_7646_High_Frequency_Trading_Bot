@@ -1,16 +1,89 @@
-Agent Overview:
-The mdaniels33_finalagentMPD trading agent operates within the ABIDES simulation framework, focusing on high-frequency trading strategies for the asset JPM. It primarily uses the Relative Strength Index (RSI) to inform its trading decisions and applies a fixed stop-loss strategy to manage risk effectively.
+# mdaniels33_finalagentMPD Trading Agent
 
-RSI Trading Strategy:
-The agent employs RSI, a widely recognized momentum oscillator, to discern potential trading opportunities. An RSI reading below 20 is interpreted as an oversold condition, suggesting a favorable moment for the agent to initiate buy orders, provided sufficient cash reserves are available. On the flip side, an RSI value exceeding 80 is perceived as an overbought scenario, compelling the agent to execute sell orders or engage in short selling. RSI calculations are derived from the asset's historical closing prices, adhering to a predefined look-back period.
+## Overview
+The **mdaniels33_finalagentMPD** trading agent operates within the ABIDES simulation framework, focusing on high-frequency trading strategies for the asset *JPM*. The agent leverages the **Relative Strength Index (RSI)** for decision-making and implements a **fixed stop-loss strategy** to manage risk effectively. It is designed to align with project requirements, including closing all open positions by the end of each trading day.
 
-The Relative Strength Index (RSI) is a momentum oscillator that measures the speed and magnitude of recent price changes to evaluate overbought or oversold conditions in the price of an asset. To calculate the RSI, one typically follows these steps: First, determine the average gains and average losses over a specified period. This is done by comparing the closing price of each period to the previous period's closing price, recording the change as a gain if the price increased, or as a loss if it decreased. If there's no change, both gain and loss are zero. Second, calculate the relative strength (RS) which is the ratio of the average gain to the average loss over the period. Finally, the RSI is calculated using the formula: RSI = 100 - (100 / (1 + RS)). This formula yields a value between 0 and 100, indicating whether a security might be considered overbought (RSI above 80) or oversold (RSI below 20), suggesting potential reversal points in the market.
+---
 
-Fixed Stop-Loss Strategy:
-In contrast to dynamic adjustments based on market volatility, the agent adopts a fixed stop-loss approach to safeguard its positions. Specifically, for long positions, the stop-loss threshold is determined by setting the stop price at 90% (0.9 times) of the purchase price. Conversely, for short positions, the stop price is established at 110% (1.1 times) of the sale price. This strategy is straightforward yet effective in curtailing potential losses by automatically triggering sell or buy-back orders when these predefined thresholds are crossed.
+## Strategy Details
 
-Implementation Details:
+### RSI Trading Strategy
+The agent employs the **Relative Strength Index (RSI)**, a momentum oscillator, to identify overbought and oversold conditions in the market:
+- **Oversold Condition (RSI < 20)**:
+  - Indicates a potential buying opportunity.
+  - The agent places buy orders if sufficient cash is available.
+- **Overbought Condition (RSI > 80)**:
+  - Suggests a potential selling or short-selling opportunity.
+  - The agent places sell or short-sell orders accordingly.
 
-Initialization: The agent is initialized with a set cash balance, and predefined size for each trade, alongside a wake-up frequency to evaluate market conditions periodically.
-Market Analysis: With each wake-up call, the agent computes the current RSI based on recent price movements and assesses the need to trade based on the RSI readings.
-Trade Execution: Leveraging the RSI signals, the agent executes trades while adhering to the fixed stop-loss thresholds. It meticulously ensures the closure of all open positions by the trading day's end, aligning with the project's stipulations.
+#### RSI Calculation
+1. **Determine Average Gains and Losses**:
+   - Compare the closing prices over a predefined period.
+   - Calculate changes as gains (if the price increased) or losses (if the price decreased). No change results in both gain and loss being zero.
+2. **Calculate Relative Strength (RS)**:
+   - RS = (Average Gain) / (Average Loss).
+3. **Calculate RSI**:
+   - RSI = 100 - (100 / (1 + RS)).
+   - The RSI ranges between 0 and 100:
+     - **RSI > 80**: Overbought, indicating a potential reversal.
+     - **RSI < 20**: Oversold, suggesting a buying opportunity.
+
+### Fixed Stop-Loss Strategy
+The agent adopts a **fixed stop-loss** approach to limit potential losses:
+- **Long Positions**:
+  - Stop-loss threshold is set at **90% of the purchase price** (0.9 × purchase price).
+- **Short Positions**:
+  - Stop-loss threshold is set at **110% of the sale price** (1.1 × sale price).
+
+This straightforward strategy ensures automated execution of sell or buy-back orders when prices cross these thresholds.
+
+---
+
+## Implementation Details
+
+### Initialization
+- The agent starts with:
+  - A predefined cash balance.
+  - A fixed trade size for each transaction.
+  - A set wake-up frequency to evaluate market conditions periodically.
+
+### Market Analysis
+- At each wake-up event:
+  - The agent computes the current RSI using recent price movements.
+  - Trades are initiated or adjusted based on RSI signals and stop-loss thresholds.
+
+### Trade Execution
+- Trades are executed based on the RSI signals:
+  - Buy, sell, or short-sell orders are placed.
+- Stop-loss levels are continuously monitored and triggered as needed.
+- All open positions are closed by the end of the trading day to comply with project requirements.
+
+---
+
+## Files
+
+1. **`mdaniels33_finalagentMPD.py`**:
+   - Contains the code implementation of the trading agent.
+   - Includes logic for market analysis, RSI calculation, and trade execution.
+
+2. **`finalagentMPD.cfg`**:
+   - Configuration file specifying:
+     - Initial cash balance.
+     - Trade size.
+     - Wake-up frequency.
+     - Other agent-specific parameters.
+
+---
+
+## How to Use
+
+### Prerequisites
+- Install the **ABIDES** simulation framework: [ABIDES GitHub Repository](https://github.com/abides-sim/abides).
+- Ensure the asset data for *JPM* is available in the simulation environment.
+
+### Steps
+1. Place the files `mdaniels33_finalagentMPD.py` and `finalagentMPD.cfg` in the appropriate directory within the ABIDES framework.
+2. Update the `finalagentMPD.cfg` file with desired parameters (e.g., initial cash balance, trade size).
+3. Run the agent using the ABIDES simulation framework:
+   ```bash
+   python abides.py -c finalagentMPD.cfg
